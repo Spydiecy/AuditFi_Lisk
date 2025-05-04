@@ -2,7 +2,7 @@
 
 **Next-generation smart contract security powered by Mistral AI, delivering instant, on-chain audit reports for Pharos Network.**
 
-![AuditFi Dashboard](https://github.com/user-attachments/assets/f35a7bc8-3a5a-43a3-a931-1cae9facf9bf)
+![image](https://github.com/user-attachments/assets/6b211909-365d-441b-a8f0-ec9ac9f0b7f4)
 
 ## 🌟 Features
 
@@ -16,7 +16,7 @@
   - Specialized gas optimization for Pharos environment
   - Instant verification on Pharos Network Explorer
   
-  ![Pharos Network Support](https://github.com/user-attachments/assets/e14ab2ae-90b1-43aa-ab08-c931eb42045d)
+  ![image](https://github.com/user-attachments/assets/e3bbd5d5-b304-4d07-aa05-f006cd994d5a)
 
 - **Self-Contained Smart Contract Templates**
   - Dependency-free ERC20 implementation
@@ -24,7 +24,7 @@
   - AI-assisted contract generation with custom specifications
   - Robust security features built into every template
   - Pharos Network gas optimizations
-  - ![Screenshot 2025-03-06 202229](https://github.com/user-attachments/assets/9208b0bb-8b01-46ce-9227-6042d38ddde6)
+  - ![image](https://github.com/user-attachments/assets/97ea0ad7-46f9-44c7-b3a0-c87082e15c72)
 
 - **Secure Contract Building**
   - Zero-dependency contract architecture
@@ -32,14 +32,15 @@
   - Comprehensive event emissions for full transparency
   - Robust access control and integrity checks
   - Pharos-specific optimizations for improved performance
+  - ![image](https://github.com/user-attachments/assets/3a3e1d04-aacb-4edc-86a6-d79148c5d185)
 
 - **On-Chain Verification System**  
   - All audit reports permanently stored on Pharos Network
   - Immutable audit history for complete traceability
   - Direct explorer integration for transparency
   - Verifiable security scores
-  - ![image](https://github.com/user-attachments/assets/a38973b8-3ff5-4f19-aa07-a03671303f3b)
-  - ![image](https://github.com/user-attachments/assets/0fa36ed0-8ee6-43ab-b8e6-28b4a9dfcfef)
+  - ![image](https://github.com/user-attachments/assets/eafb5182-7542-41fd-a3f1-bdebbe0bd26c)
+  - ![image](https://github.com/user-attachments/assets/7d211ccd-a685-4f98-a60d-391f61534ba4)
 
 - **Interactive Development Experience**
   - Real-time code generation and validation
@@ -101,9 +102,9 @@ Visit [AuditFi](https://auditfi-pharos.netlify.app/) to try it out on Pharos Net
   - Automatically generated smart contract documentation
   - AI-powered test case creation for multiple frameworks
 
-![image](https://github.com/user-attachments/assets/55b934a4-7fd5-42ff-ad19-a2430e508a90)
+![image](https://github.com/user-attachments/assets/1e124ba6-c391-4967-ad6c-c31b9bffe584)
 
-![image](https://github.com/user-attachments/assets/252eecc8-9bec-4b20-95cc-4125ae6f41ae)
+![image](https://github.com/user-attachments/assets/6c83078a-2ac1-4dda-b8e1-00fceb76528b)
 
 ## 🔗 Network Support
 
@@ -115,7 +116,7 @@ Exclusively supporting Pharos Network DevNet for:
 - Network-specific gas optimization
 - Pharos-focused security patterns
 
-![image](https://github.com/user-attachments/assets/cb47e089-9035-483f-a6e8-ac3cdd125b24)
+![image](https://github.com/user-attachments/assets/4c6b05e2-1b5b-4a38-b114-37f3893217be)
 
 ## 📬 Contact & Support
 
