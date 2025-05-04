@@ -23,19 +23,19 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 
-// Simplified chain config to only include Electroneum Network
+// Simplified chain config to only include Pharos Devnet
 const CHAIN_CONFIG = {
-  electroneumMainnet: {
-    chainId: '0xCB2E', // 52014 in hex
-    chainName: 'Electroneum Mainnet',
+  pharosDevnet: {
+    chainId: '0xC352', // 50002 in hex
+    chainName: 'Pharos Devnet',
     nativeCurrency: {
-      name: 'Electroneum',
-      symbol: 'ETN',
+      name: 'Pharos',
+      symbol: 'PTT',
       decimals: 18
     },
-    rpcUrls: ['https://rpc.ankr.com/electroneum'],
-    blockExplorerUrls: ['https://blockexplorer.electroneum.com'],
-    iconPath: '/chains/electroneum.png'
+    rpcUrls: ['https://devnet.dplabs-internal.com'],
+    blockExplorerUrls: ['https://pharosscan.xyz'],
+    iconPath: '/chains/pharos.png'
   }
 };
 
@@ -57,7 +57,7 @@ const features = [
   {
     icon: Lightning,
     title: 'Multi-Chain Support',
-    description: 'Audit smart contracts on Electroneum network'
+    description: 'Audit smart contracts on Pharos Devnet'
   },
   {
     icon: Code,
@@ -78,12 +78,12 @@ const features = [
 
 const recentAudits: Audit[] = [
   {
-    contractHash: '0x123...abc',
+    contractHash: '0X123...abc',
     stars: 5,
     summary: 'No critical vulnerabilities found. Code follows best practices.',
     auditor: '0xABc...123',
     timestamp: 1703116800,
-    chain: 'electroneumMainnet'
+    chain: 'pharosDevnet'
   },
   {
     contractHash: '0x456...def',
@@ -91,7 +91,7 @@ const recentAudits: Audit[] = [
     summary: 'Minor optimizations suggested. Overall secure implementation.',
     auditor: '0xDEf...456',
     timestamp: 1703030400,
-    chain: 'electroneumMainnet'
+    chain: 'pharosDevnet'
   },
   {
     contractHash: '0x789...ghi',
@@ -99,7 +99,7 @@ const recentAudits: Audit[] = [
     summary: 'Excellent implementation with robust security measures.',
     auditor: '0xGHi...789',
     timestamp: 1702944000,
-    chain: 'electroneumMainnet'
+    chain: 'pharosDevnet'
   }
 ];
 
@@ -177,7 +177,7 @@ export default function Home() {
                 <span className="text-blue-400">SECURITY</span>
               </h1>
               <p className="text-gray-400 text-lg mb-8 max-w-xl">
-                Secure your smart contracts with AI-powered analysis, documentation, and on-chain verification. Get instant security audits powered by Finetuned AI, now optimized for Electroneum Network.
+                Secure your smart contracts with AI-powered analysis, documentation, and on-chain verification. Get instant security audits powered by Finetuned AI, now optimized for Pharos Devnet.
               </p>
               <div className="flex gap-4">
                 <Link href="/audit">
@@ -317,10 +317,10 @@ export default function Home() {
               <span className="text-blue-400 text-sm font-semibold">Network Support</span>
             </div>
             <h2 className="text-4xl font-bold font-mono mb-4">
-              <span className="text-blue-400">Electroneum</span> Network Integration
+              <span className="text-blue-400">Pharos</span> Devnet Integration
             </h2>
             <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Optimized for the Electroneum Network ecosystem with native support for ETN tokens
+              Optimized for the Pharos Devnet ecosystem with native support for PTT tokens
             </p>
           </motion.div>
 
@@ -332,22 +332,22 @@ export default function Home() {
               <div className="relative">
                 <div className="absolute inset-0 bg-blue-500/20 rounded-full filter blur-md"></div>
                 <Image
-                  src="/chains/electroneum.png"
-                  alt="Electroneum Network"
+                  src="/chains/pharos.png"
+                  alt="Pharos Devnet"
                   width={60}
                   height={60}
                   className="rounded-full relative z-10 ring-2 ring-blue-500/50 p-1"
                 />
               </div>
               <div>
-                <h3 className="font-semibold text-xl mb-1">Electroneum Network Mainnet & Testnet</h3>
-                <p className="text-gray-400">Native Token: <span className="text-blue-400 font-semibold">ETN</span></p>
+                <h3 className="font-semibold text-xl mb-1">Pharos Devnet</h3>
+                <p className="text-gray-400">Native Token: <span className="text-blue-400 font-semibold">PTT</span></p>
                 <div className="flex items-center mt-3 space-x-4">
-                  <a href="https://blockexplorer.electroneum.com" target="_blank" rel="noopener noreferrer" className="text-sm text-blue-400 hover:text-blue-300 flex items-center space-x-1">
+                  <a href="https://pharosscan.xyz" target="_blank" rel="noopener noreferrer" className="text-sm text-blue-400 hover:text-blue-300 flex items-center space-x-1">
                     <FileSearch size={16} />
                     <span>Block Explorer</span>
                   </a>
-                  <a href="https://developer.electroneum.com" target="_blank" rel="noopener noreferrer" className="text-sm text-blue-400 hover:text-blue-300 flex items-center space-x-1">
+                  <a href="https://docs.pharosnetwork.xyz/" target="_blank" rel="noopener noreferrer" className="text-sm text-blue-400 hover:text-blue-300 flex items-center space-x-1">
                     <Code size={16} />
                     <span>Documentation</span>
                   </a>
@@ -512,7 +512,7 @@ export default function Home() {
               <p className="text-gray-400 mb-4">Secure your smart contracts with AI-powered analysis and on-chain verification.</p>
               <div className="flex space-x-4">
                 <a
-                  href="https://github.com/Spydiecy/AuditFi_Electroneum"
+                  href="https://github.com/Spydiecy/AuditFi_Pharos"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-400 hover:text-blue-400 transition-colors"
@@ -557,17 +557,17 @@ export default function Home() {
               <h3 className="font-semibold mb-4">Resources</h3>
               <ul className="space-y-2">
                 <li>
-                  <a href="https://developer.electroneum.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  <a href="https://pharosscan.xyz" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-400 transition-colors">
                     Documentation
                   </a>
                 </li>
                 <li>
-                  <a href="https://discord.gg/electroneum-999612117521010768" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  <a href="https://discord.gg/pharos" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-400 transition-colors">
                     Community
                   </a>
                 </li>
                 <li>
-                  <a href="https://t.me/officialelectroneum" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  <a href="https://t.me/pharos" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-400 transition-colors">
                     Support
                   </a>
                 </li>

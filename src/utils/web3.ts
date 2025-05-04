@@ -44,29 +44,17 @@ declare global {
 }
 
 export const CHAIN_CONFIG: Record<string, ChainConfig> = {
-  electroneumMainnet: {
-    chainId: '0xCB2E', // 52014 in hex
-    chainName: 'Electroneum Mainnet',
+  pharosDevnet: {
+    chainId: '0xC352', // 50002 in hex
+    chainName: 'Pharos Devnet',
     nativeCurrency: {
-      name: 'Electroneum',
-      symbol: 'ETN',
+      name: 'Pharos',
+      symbol: 'PTT',
       decimals: 18
     },
-    rpcUrls: ['https://rpc.ankr.com/electroneum'],
-    blockExplorerUrls: ['https://blockexplorer.electroneum.com'],
-    iconPath: '/chains/electroneum.png'
-  },
-  electroneumTestnet: {
-    chainId: '0x4F5E0C', // 5201420 in hex
-    chainName: 'Electroneum Testnet',
-    nativeCurrency: {
-      name: 'Electroneum',
-      symbol: 'ETN',
-      decimals: 18
-    },
-    rpcUrls: ['https://rpc.ankr.com/electroneum_testnet'],
-    blockExplorerUrls: ['https://blockexplorer.thesecurityteam.rocks'],
-    iconPath: '/chains/electroneum.png'
+    rpcUrls: ['https://devnet.dplabs-internal.com'],
+    blockExplorerUrls: ['https://pharosscan.xyz'],
+    iconPath: '/chains/pharos.png'
   }
 } as const;
 
