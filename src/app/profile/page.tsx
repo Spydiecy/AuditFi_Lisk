@@ -62,62 +62,77 @@ export default function ProfilePage() {
       const allAudits: UserAudit[] = [];
       const chainCounts: Record<string, number> = {};
       let totalStars = 0;
-  
-      for (const [chainKey, chainData] of Object.entries(CHAIN_CONFIG)) {
-        try {
-          console.log(`Fetching from ${chainKey}...`);
-          const provider = new ethers.JsonRpcProvider(chainData.rpcUrls[0]);
-  
-          const contract = new ethers.Contract(
-            CONTRACT_ADDRESSES[chainKey as keyof typeof CONTRACT_ADDRESSES],
-            AUDIT_REGISTRY_ABI,
-            provider
-          );
-  
-          // Get all audits in batches
-          const BATCH_SIZE = 50;
-          const totalContracts = await contract.getTotalContracts();
-          let processed = 0;
-  
-          while (processed < totalContracts) {
-            try {
-              const {
-                contractHashes,
-                stars,
-                summaries,
-                auditors,
-                timestamps
-              } = await contract.getAllAudits(processed, BATCH_SIZE);
-  
-              // Filter audits for the current user
-              for (let i = 0; i < contractHashes.length; i++) {
-                if (auditors[i].toLowerCase() === userAddress.toLowerCase()) {
-                  allAudits.push({
-                    contractHash: contractHashes[i],
-                    stars: Number(stars[i]),
-                    summary: summaries[i],
-                    timestamp: Number(timestamps[i]),
-                    chain: chainKey as keyof typeof CHAIN_CONFIG
-                  });
-  
-                  // Update chain counts and total stars
-                  chainCounts[chainKey] = (chainCounts[chainKey] || 0) + 1;
-                  totalStars += Number(stars[i]);
-                }
-              }
-  
-              processed += contractHashes.length;
-            } catch (batchError) {
-              console.error(`Error fetching batch at ${processed} from ${chainKey}:`, batchError);
-              break;
-            }
-          }
-        } catch (chainError) {
-          console.error(`Error fetching from ${chainKey}:`, chainError);
-          chainCounts[chainKey] = 0;
+      
+      try {
+        console.log('Fetching user history from Pharos Devnet...');
+        
+        // First, get all contract hashes audited by this user
+        const historyResponse = await fetch('/api/blockchain', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            method: 'getAuditorHistory',
+            params: [userAddress]
+          })
+        });
+        
+        if (!historyResponse.ok) {
+          throw new Error('Failed to get auditor history');
         }
+        
+        const historyData = await historyResponse.json();
+        const contractHashes = historyData.result;
+        
+        console.log(`Found ${contractHashes.length} audits for address ${userAddress}`);
+        
+        // For each contract hash, get the detailed audit info
+        for (const hash of contractHashes) {
+          const auditResponse = await fetch('/api/blockchain', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              method: 'getContractAudits',
+              params: [hash]
+            })
+          });
+          
+          if (!auditResponse.ok) {
+            console.error(`Failed to fetch details for contract ${hash}`);
+            continue;
+          }
+          
+          const auditData = await auditResponse.json();
+          const audits = auditData.result;
+          
+          // Filter only audits by this user
+          const userAudits = audits.filter((audit: any) => 
+            audit.auditor.toLowerCase() === userAddress.toLowerCase()
+          );
+          
+          for (const audit of userAudits) {
+            const chainKey = 'pharosDevnet' as keyof typeof CHAIN_CONFIG;
+            
+            allAudits.push({
+              contractHash: hash,
+              stars: audit.stars,
+              summary: audit.summary,
+              timestamp: audit.timestamp,
+              chain: chainKey
+            });
+            
+            // Update chain counts and total stars
+            chainCounts[chainKey] = (chainCounts[chainKey] || 0) + 1;
+            totalStars += audit.stars;
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user stats:', error);
       }
-  
+      
       const totalAudits = allAudits.length;
       
       setStats({
@@ -128,7 +143,7 @@ export default function ProfilePage() {
           .sort((a, b) => b.timestamp - a.timestamp)
           .slice(0, 5)
       });
-  
+      
     } catch (error) {
       console.error('Failed to fetch user stats:', error);
     } finally {
@@ -136,17 +151,20 @@ export default function ProfilePage() {
     }
   };
 
+  // Display connect wallet UI when no address is found
   if (!address) {
     return (
-      <div className="min-h-screen py-12">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-col items-center justify-center space-y-6 mt-20">
-            <div className="relative w-20 h-20 mb-2">
-              <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl"></div>
-              <Wallet size={80} className="text-blue-400 relative z-10" weight="duotone" />
-            </div>
-            <h2 className="text-2xl font-mono">Connect Your Wallet</h2>
-            <p className="text-gray-400 max-w-md text-center">Connect your wallet to view your audit profile and see your security verification statistics</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="bg-gray-900/80 border border-gray-800 rounded-xl p-10 text-center max-w-lg shadow-2xl">
+          <div className="relative w-20 h-20 mx-auto mb-8">
+            <div className="absolute inset-0 bg-blue-500/10 rounded-full blur-xl"></div>
+            <Wallet size={80} className="text-blue-400 relative z-10" weight="duotone" />
+          </div>
+          <h1 className="text-3xl font-mono font-bold mb-6">Connect Your Wallet</h1>
+          <p className="text-gray-400 mb-8">
+            Connect your wallet to view your audit profile and statistics
+          </p>
+          <div>
             <button
               onClick={async () => {
                 try {
@@ -183,7 +201,7 @@ export default function ProfilePage() {
                 <User size={16} className="text-blue-400" weight="bold" />
                 <span className="font-mono">{address}</span>
                 <a
-                  href={`https://etherscan.io/address/${address}`}
+                  href={`https://pharosscan.xyz/address/${address}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-400 hover:text-blue-300 transition-colors"

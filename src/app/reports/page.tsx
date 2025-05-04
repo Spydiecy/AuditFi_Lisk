@@ -53,70 +53,88 @@ export default function ReportsPage() {
     setIsLoading(true);
     try {
       const allAudits: AuditReport[] = [];
-      const BATCH_SIZE = 50;
-  
-      for (const [chainKey, chainData] of Object.entries(CHAIN_CONFIG)) {
-        try {
-          console.log(`Fetching from ${chainKey}...`);
-          
-          const provider = new ethers.JsonRpcProvider(chainData.rpcUrls[0]);
-  
-          const contract = new ethers.Contract(
-            CONTRACT_ADDRESSES[chainKey as ChainKey],
-            AUDIT_REGISTRY_ABI,
-            provider
-          );
-  
-          // Get total contracts for this chain
-          const totalContracts = await contract.getTotalContracts();
-          console.log(`Found ${totalContracts.toString()} contracts on ${chainKey}`);
-  
-          // Fetch in batches
-          let processed = 0;
-          while (processed < totalContracts) {
-            try {
-              const {
-                contractHashes,
-                stars,
-                summaries,
-                auditors,
-                timestamps
-              } = await contract.getAllAudits(processed, BATCH_SIZE);
-  
-              for (let i = 0; i < contractHashes.length; i++) {
-                const filter = contract.filters.AuditRegistered(contractHashes[i]);
-                const blockNumber = await provider.getBlockNumber();
-                const events = await contract.queryFilter(filter, 0, blockNumber);
-                const txHash = events[events.length - 1]?.transactionHash || '';
-  
-                allAudits.push({
-                  contractHash: contractHashes[i],
-                  transactionHash: txHash,
-                  stars: Number(stars[i]),
-                  summary: summaries[i],
-                  auditor: auditors[i],
-                  timestamp: Number(timestamps[i]),
-                  chain: chainKey as ChainKey
-                });
-              }
-  
-              processed += contractHashes.length;
-              console.log(`Processed ${processed}/${totalContracts} on ${chainKey}`);
-  
-            } catch (batchError) {
-              console.error(`Error fetching batch at ${processed} from ${chainKey}:`, batchError);
-              break;
-            }
-          }
-  
-        } catch (chainError) {
-          console.error(`Error processing chain ${chainKey}:`, chainError);
+      
+      try {
+        console.log('Fetching audit reports from Pharos Devnet...');
+        
+        // First get the total number of contracts
+        const totalResponse = await fetch('/api/blockchain', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            method: 'getTotalContracts',
+            params: []
+          })
+        });
+        
+        if (!totalResponse.ok) {
+          throw new Error('Failed to get total contracts');
         }
+        
+        const totalData = await totalResponse.json();
+        const totalContracts = totalData.result;
+        console.log(`Found ${totalContracts} contracts on Pharos Devnet`);
+        
+        // Fetch in batches to respect rate limits
+        const BATCH_SIZE = 10; 
+        let processed = 0;
+        
+        while (processed < totalContracts) {
+          try {
+            const response = await fetch('/api/blockchain', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                method: 'getAllAudits',
+                params: [{
+                  startIndex: processed,
+                  limit: BATCH_SIZE
+                }]
+              })
+            });
+            
+            if (!response.ok) {
+              throw new Error('Failed to fetch audits batch');
+            }
+            
+            const data = await response.json();
+            const audits = data.result;
+            
+            for (const audit of audits) {
+              allAudits.push({
+                contractHash: audit.contractHash,
+                transactionHash: audit.transactionHash || "0x", // Default if not available
+                stars: audit.stars,
+                summary: audit.summary,
+                auditor: audit.auditor,
+                timestamp: audit.timestamp,
+                chain: 'pharosDevnet' // Since we're only using Pharos Devnet
+              });
+            }
+            
+            processed += audits.length;
+            console.log(`Processed ${processed}/${totalContracts} audits`);
+            
+            // Break the loop if we received fewer items than requested (end of list)
+            if (audits.length < BATCH_SIZE) break;
+            
+          } catch (batchError) {
+            console.error(`Error fetching batch at ${processed}:`, batchError);
+            break;
+          }
+        }
+        
+      } catch (error) {
+        console.error('Error fetching audits:', error);
       }
-  
+
       console.log(`Total audits collected: ${allAudits.length}`);
       setReports(allAudits.sort((a, b) => b.timestamp - a.timestamp));
-  
+
     } catch (error) {
       console.error('Failed to fetch audits:', error);
     } finally {

@@ -67,7 +67,7 @@ const features = [
   {
     icon: FileText,
     title: 'Documentation Generation',
-    description: 'Gemini powered documentation for Solidity contracts'
+    description: 'Ai powered documentation for Solidity contracts'
   },
   {
     icon: TestTube,
